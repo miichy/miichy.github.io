@@ -1,31 +1,27 @@
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
 <script type="text/javascript" src="./js/script.js"></script>
 <script type="text/javascript" src="./js/move.js"></script>
 
 </head>
-	<img id="myImg" src="./img/fish0.png" alt="fish" />
-
-	<body >
-		<p id="text">hello  woooorld</p>
-	<button id="myButton">
-		Button
-	</button>	
-	<canvas id="myCanvas" >
-		This is a canvas.
-	</canvas>
-	<div class='test'>
-		<span class='bot'></span>
-		<span class='top'></span>
-		CSS bubble chat
+<body >
+<div id="wrap">
+	<div id="left">
 	</div>
 
-	<div class="move">
+<div id="center" onmouseover="this.style.backgroundColor='#cccccc'" onmouseout="this.style.backgroundColor=''">
+	
+	<div class="move" onclick="followMouse(event)">
 		<div class="move-first" onclick="changeFight()">
 			<img id="move_img" src="./img/1.png" alt="">
 		</div>
 	</div>
+</div>
+	<div id="right">
+	</div>
+</div>
 
 	</body>
 </html>

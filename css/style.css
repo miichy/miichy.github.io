@@ -1,8 +1,41 @@
-#text{
-    position: absolute;
-    left: 10px;
+body{
+    background-color: #384597;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
 }
-#move-first{
+#wrap{
+    width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#left,#center,#right{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+#left{
+    float: left;
+    background: red;
+    overflow: hidden;
+}
+#center{
+    background-image: url("../img/hh.jpg");
+    background-repeat: no-repeat;
+    height: 10000px;
+    margin: center;
+    overflow: auto;
+}
+#right{
+    float: right;
+    background: blue;
+    overflow: hidden;
+}
+.move{
+    border: 2px solid #ffffff;
+    margin-left: 18cm;
+    width: 300px;
+    height: 300px
+}
+.move-first{
     border-width: 10px;
     border-style: solid;
     border-color: green; 
@@ -16,48 +49,4 @@
 #myImg{
     position: relative;
     margin-top: 20px;
-}
-#myButton{
-    position: relative;
-    margin-top: 20px;
-}
-#myCanvas{
-    width: 300;
-    height: 100;
-	border: 2px dashed #000000;
-    margin-top: 0px;
-}
-.test{
-    width:300px; 
-    padding:30px 20px; 
-    margin-left:160px; 
-    margin-top:20px ;
-    background:#beceeb; 
-    position:relative;
-}
-.test span{
-    width:0; 
-    height:0; 
-    font-size:0; 
-    overflow:hidden; 
-    position:absolute;
-}
-.test span.bot{
-    border-width:20px; 
-    border-style:solid; 
-    border-color:#ffffff #beceeb #beceeb #ffffff; 
-    left:-40px; 
-    top:40px;
-}
-.test span.top{
-    border-width:10px 20px; 
-    border-style:dashed solid solid dashed; 
-    border-color:transparent #ffffff #ffffff transparent; 
-    left:-40px; 
-    top:60px;
-}
-#move{
-    background-color:white;  
-    margin: 0 0 0 10px;  
-    width:98%;
 }
