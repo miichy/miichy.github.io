@@ -1,0 +1,52 @@
+body{
+    background-color: #384597;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+}
+#wrap{
+    width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#left,#center,#right{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+#left{
+    float: left;
+    background: red;
+    overflow: hidden;
+}
+#center{
+    background-image: url("../img/hh.jpg");
+    background-repeat: no-repeat;
+    height: 10000px;
+    margin: center;
+    overflow: auto;
+}
+#right{
+    float: right;
+    background: blue;
+    overflow: hidden;
+}
+.move{
+    border: 2px solid #ffffff;
+    margin-left: 18cm;
+    width: 300px;
+    height: 300px
+}
+.move-first{
+    border-width: 10px;
+    border-style: solid;
+    border-color: green; 
+    height: 150px; 
+    width: 250px; 
+    background-color: lightblue;
+}
+.move_img{
+    margin: 50px 0 0 50px;
+}
+#myImg{
+    position: relative;
+    margin-top: 20px;
+}
