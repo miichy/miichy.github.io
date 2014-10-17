@@ -33,6 +33,7 @@ Github Page可谓是程序猿装13利器，又因最近决定一周最少一次�
 **坑
 - 生成密钥，将其放到github到域名创库中
 - 安装jekyll
+- CNAME慎用！CNAME不能失效这一点好奇怪？？貌似还是用gh_pages分支才挽救回来的？
 
 **Developers like Jekyll because we can write content like we write code:**
 
