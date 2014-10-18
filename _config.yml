@@ -1,6 +1,11 @@
 # Site settings
 title: Welcome to Miichy.Liu's World.
-email: miichy.liu@gmail.com
+
+author:
+	name : Miichy Liu
+	email : miichy.liu@gmail.com
+	weibo : chateldon
+
 description: > # this means to ignore newlines until "baseurl:"
   欢迎来到miichy.liu主页。
 baseurl: "" # the subpath of your site, e.g. /blog/
