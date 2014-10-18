@@ -29,7 +29,6 @@ Markdown始于2004年，现在都已有十年之久。于我，还只是因为�
  $$E=mc^2$$
 
  ### 高亮代码[^code]
-
  ```java
 /**
 	author:miichy
