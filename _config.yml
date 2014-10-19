@@ -1,10 +1,9 @@
 # Site settings
 title: Welcome to Miichy.Liu's World.
 
-author:
-	name : Miichy Liu
-	email : miichy.liu@gmail.com
-	weibo : chateldon
+name : Miichy Liu
+email : miichy.liu@gmail.com
+weibo : chateldon
 
 description: > # this means to ignore newlines until "baseurl:"
   欢迎来到miichy.liu主页。
