@@ -79,7 +79,7 @@ sed [-n] [-f scriptfile] [file...]
 - array -- {line[NR] = $0}END{print line[3]} `for循环print`
 - NR:Number of records processed  NF:Number of fields in current record
 - FILENAME ; FS ; OFS ; ARGC/ARGV;
-- 操作：=;==;!=;&&;||;!;<,>,<=,>=;+,-,/,*,%,^;string
+- 操作：=;==;!=;&&;\|\|;!;<,>,<=,>=;+,-,/,*,%,^;string
 
 
 ------
