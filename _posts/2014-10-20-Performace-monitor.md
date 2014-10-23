@@ -5,9 +5,11 @@ date:   2014-10-20 00:16:00
 categories: performace
 ---
 
----
+------
+
 # 性能测试监控
-本文由前两天的thrift服务性能测试而来，用于记录测试中所习所得。测试服务为thrift服务，数据库为mongodb，施压端为本人自己的工作机器，运用的jmeter施压，与之相同且更出名的是LoadRunner。另：[酷壳](http://coolshell.cn/articles/7490.html)
+
+本文由前两天的thrift服务性能测试而来，用于记录测试中所习所得。测试服务为thrift服务，数据库为mongodb，施压端为本人自己的工作机器，运用的jmeter施压，与之相同且更出名的是LoadRunner。另：[酷壳关于系统调优的方法](http://coolshell.cn/articles/7490.html)
 
 ## 测试之前
 服务端机器以及数据库所在的机器，关于防火墙设置，端口最大链接数，tcp链接数，tcp链接Alive时间，资源释放间隔时间等等配置。Jmeter的JVM内存配置为1G。RPC server数以及mongodb的连接池数都是需要调整的地方。
@@ -48,6 +50,7 @@ categories: performace
 jmeter的响应时间大大多于方法的调用时间（时序图表示），而这两者时间之差为jmeter发出请求到rpc服务所在机器到时间t1加上rpc服务所在机器将数据返回给jmeter的时间t2。而t1则是rpc服务打开链接且进行通信的时间，这包括rpc链接的tcp三次握手时间。t2为tcp close时间，初步分析，t1远大于t2。Jmeter之所以响应时间如此大跟t1成正比关系。
 
 ------
+
 ## 性能指标
 
 **Performance tuning**
@@ -81,64 +84,64 @@ Profiler、Jstat、Jconsole、Jmap、Jprofiler、Nmon（监控指标列表）
 ### 20个常见的瓶颈
 
 - **数据库**
-1,工作区超过可使用的RAM
-2,长或者短的查询操作
-3,写写冲突
-4,Large joins 耗费内存
+  - 1,工作区超过可使用的RAM
+  - 2,长或者短的查询操作
+  - 3,写写冲突
+  - 4,Large joins 耗费内存
 - **Virtualisazion**
-1,sharing a HDD,disk seek death
-2,网络IO fluctuations in the cloud
+  - 1,sharing a HDD,disk seek death ；共享硬盘、磁盘seek death
+  - 2,网络IO fluctuations in the cloud
 - **程序**
-1,线程：死锁、heavyweight as compared to events debugging,non-linear scalability,etc...
-2,事件驱动程序：callback complexity，how to store state in function calls。
-3,Lack of profiling ,lack of tracing ,lack of loggin
-4,one piece can't scale,SPOF,non horizontally scalable,etc
-5,Stateful apps
-6,不好的设计
-7,algorithm complexity
-8,依赖DNS服务，DNS服务有可能阻碍服务。
-9,Stack space
+  - 1,线程：死锁、heavyweight as compared to events debugging,non-linear scalability,etc...
+  - 2,事件驱动程序：callback complexity，how to store state in function calls。
+  - 3,Lack of profiling ,lack of tracing ,lack of loggin 缺少log日志分析
+  - 4,one piece can't scale,SPOF,non horizontally scalable,etc；单点故障，非横向可扩展性；
+  - 5,Stateful apps；
+  - 6,不好的设计
+  - 7,algorithm complexity  ；算法复杂性
+  - 8,依赖DNS服务，DNS服务有可能阻碍服务。
+  - 9,Stack space 堆栈空间
 - **磁盘**
-1,Local disk access
-2,Random disk I/O -> disk seeks,磁盘搜索
-3,Disk fragmentation 磁盘碎片
-4,SSDs performance drop once data written is greater than SSD size
+  - 1,Local disk access；本地磁盘获取
+  - 2,Random disk I/O 随机磁盘I/O -> disk seeks,磁盘搜索
+  - 3,Disk fragmentation 磁盘碎片
+  - 4,SSDs performance drop once data written is greater than SSD size；一旦数据写入大于固态硬盘的大小，ssd的性能将大大下降
 - **OS**
-1,Fsync flushing,linux buffer cache filling up
-2,TCP 缓存太小
-3,文件描述符限制
-4,Power budget
+  - 1,Fsync flushing,linux buffer cache filling up  文件同步冲洗，linux缓冲区填满
+  - 2,TCP 缓存太小
+  - 3,文件描述符限制
+  - 4,Power budget 功率分配
 - **缓存**
-1,没有使用memcached（数据库pummeling）
-2,Http：header，etags，not gzipping，等等
-3,没有使用浏览器缓存
-4,Byte code 缓存，比如PHP
-5,L2/L2缓存，这是一个大的瓶颈。将重要的和热数据放在L1/L2.this spans so much:snappy for network I/O,column DBs run algorithms directly on compressed data,etc.Then there are techniques to not destroy your TLB.the most important idea is to have a firm grasp on computer architecture in terms of CPUs multi-core,L1/L2,shared L3,NUMA RAM,data transfer bandwidth/latency from DRAM to chip,DRAM caches DiskPages,DirtyPages,TCP packets travel thru CPU<>DRAM<>NIC.
+  - 1,没有使用memcached（数据库pummeling）
+  - 2,Http：header，etags，not gzipping，等等
+  - 3,没有使用浏览器缓存
+  - 4,Byte code 缓存，比如PHP
+  - 5,L2/L2缓存，这是一个大的瓶颈。将重要的和热数据放在L1/L2.this spans so much:snappy for network I/O,column DBs run algorithms directly on compressed data,etc.Then there are techniques to not destroy your TLB.the most important idea is to have a firm grasp on computer architecture in terms of CPUs multi-core,L1/L2,shared L3,NUMA RAM,data transfer bandwidth/latency from DRAM to chip,DRAM caches DiskPages,DirtyPages,TCP packets travel thru CPU<>DRAM<>NIC.
 - **CPU**
-1,CPU 超核负载
-2,上下文切换－单核中有太多线程，linux调度差，太多系统调用
-3,IO等待－所有的同一速率等待
-4,CPU缓存:Caching data is a fine grained process(In java think volatile for instance),in order to find the right balance between having multiple instances with different values for data and heavy synchronization to keep the cached date consistent.
-5,Backplane throughtput
-- **网络**
-1,NIC 
-2,DNS lookups
-3,Dropped packets
-4,网络中unexpected routes
-5,网络磁盘access
-6,Shared SANs
-7,服务失败－没有服务器的任何响应
-- **进程Process**
-1,测试时间
-2,部署时间
-3,团队大小
-4,Budget
-5,Code debt
+  - 1,CPU 超核负载
+  - 2,上下文切换－单核中有太多线程，linux调度差，太多系统调用
+  - 3,IO等待－所有的同一速率等待
+  - 4,CPU缓存:Caching data is a fine grained process(In java think volatile for instance),in order to find the right balance between having multiple instances with different values for data and heavy synchronization to keep the cached date consistent.
+  - 5,Backplane throughtput
+-**网络**
+  - 1,NIC 网卡
+  - 2,DNS lookups DNS查找
+  - 3,Dropped packets 丢包
+  - 4,网络中意外路由 ；unexpected routes
+  - 5,网络磁盘access
+  - 6,Shared SANs
+  - 7,服务失败－没有服务器的任何响应
+-**进程Process**
+  - 1,测试时间
+  - 2,部署时间
+  - 3,团队大小
+  - 4,Budget
+  - 5,Code debt 编程债务
 - **内存**
-1,内存溢出－杀掉进程、go into swap & grind to a halt
-2,内存溢出造成的Disk Thrashing（swap有关）
-3,memory library overhead
-4,内存fragmentation－java需要GC pauses；C中，malloc‘s taking forever。
+  - 1,内存溢出－杀掉进程、go into swap & grind to a halt
+  - 2,内存溢出造成的Disk Thrashing（swap有关）
+  - 3,memory library overhead 内存库开销过大
+  - 4,内存碎片fragmentation－java需要GC pauses；C中，malloc‘s taking forever。
 
 ### 决定程序类型
 
