@@ -123,7 +123,7 @@ Profiler、Jstat、Jconsole、Jmap、Jprofiler、Nmon（监控指标列表）
   - 3,IO等待－所有的同一速率等待
   - 4,CPU缓存:Caching data is a fine grained process(In java think volatile for instance),in order to find the right balance between having multiple instances with different values for data and heavy synchronization to keep the cached date consistent.
   - 5,Backplane throughtput
--**网络**
+- **网络**
   - 1,NIC 网卡
   - 2,DNS lookups DNS查找
   - 3,Dropped packets 丢包
@@ -131,7 +131,7 @@ Profiler、Jstat、Jconsole、Jmap、Jprofiler、Nmon（监控指标列表）
   - 5,网络磁盘access
   - 6,Shared SANs
   - 7,服务失败－没有服务器的任何响应
--**进程Process**
+- **进程Process**
   - 1,测试时间
   - 2,部署时间
   - 3,团队大小
