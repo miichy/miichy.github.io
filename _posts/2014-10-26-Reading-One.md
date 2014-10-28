@@ -2,7 +2,7 @@
 layout: post
 title:  "词鉴赏之一"
 date:   2014-10-26 20:24:00
-categories: Linux
+categories: 诗词
 ---
 
 **兰陵王**
