@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "python 笔记－1"
+date:   2014-10-28 23:27:00
+categories: python
+---
+
 # python 学习笔记
 
 ## 缩进
