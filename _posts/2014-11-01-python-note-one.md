@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "python 笔记－1"
-date:   2014-10-28 23:27:00
+date:   2014-11-01 17:22:00
 categories: python
 ---
 
