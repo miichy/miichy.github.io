@@ -60,7 +60,7 @@ $broadcast  向下传递事件
 
 $on  监听
 
-## awsome sublime text pulugin url
+## awesome sublime text pulugin url
 
 [best plugins for sublime](http://ipestov.com/the-best-plugins-for-sublime-text/)
 
