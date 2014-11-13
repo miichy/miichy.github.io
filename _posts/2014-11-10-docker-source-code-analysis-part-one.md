@@ -51,6 +51,8 @@ DockerClient与DockerDaemon通信的方式：
 
 DockerClient和DockerDaemon启动的可执行文件时使用docker，在docker执行时，通过传入的参数来判断是daemon还是client。
 
+![docker daemon架构](/img/docker-daemon-articultr002.jpg)
+
 DockerDaemon的架构(如图)：
 
     Docker Server
@@ -60,6 +62,7 @@ DockerDaemon的架构(如图)：
 #### Docker Server
 
 接收并调度分发Docker Client发送的请求。如图
+![docker client](/img/docker-server-articultr003.jpg)
 
 Docker的启动过程中，通过包gorilla/mux，创建一个mux.Router，提供请求的路由功能。在Golang中，gorilla/mux是一个强大的URL路由器以及调度分发器。该mux.Router中添加了众多的路由项，每一个路由项由HTTP请求方法（PUT、POST、GET或DELETE）、URL、Handler三部分组成。
 
@@ -92,6 +95,7 @@ Job的设计者，把Job设计得与Unix进程相仿。比如说：Job有一个�
 ### Graph
 
 Graph在Docker架构中扮演已下载容器镜像的保管者，以及已下载容器镜像之间关系的记录者。一方面，Graph存储着本地具有版本信息的文件系统镜像，另一方面也通过GraphDB记录着所有文件系统镜像彼此之间的关系。如图
+![graph](/img/graph-articultr004.jpg)
 
 
 其中，GraphDB是一个构建在SQLite之上的小型图数据库，实现了节点的命名以及节点之间关联关系的记录。它仅仅实现了大多数图数据库所拥有的一个小的子集，但是提供了简单的接口表示节点之间的关系。
@@ -107,12 +111,14 @@ Driver是Docker架构中的驱动模块。通过Driver驱动，Docker可以实�
 graphdriver主要用于完成容器镜像的管理，包括存储与获取。即当用户需要下载指定的容器镜像时，graphdriver将容器镜像存储在本地的指定目录；同时当用户需要使用指定的容器镜像来创建容器的rootfs时，graphdriver从本地镜像存储目录中获取指定的容器镜像。
 
 在graphdriver的初始化过程之前，有4种文件系统或类文件系统在其内部注册，它们分别是aufs、btrfs、vfs和devmapper。而Docker在初始化之时，通过获取系统环境变量”DOCKER_DRIVER”来提取所使用driver的指定类型。而之后所有的graph操作，都使用该driver来执行。如图
+![graph](/img/graphdriver-articul005.jpg)
 
 
 networkdriver的用途是完成Docker容器网络环境的配置，其中包括Docker启动时为Docker环境创建网桥；Docker容器创建时为其创建专属虚拟网卡设备；以及为Docker容器分配IP、端口并与宿主机做端口映射，设置容器防火墙策略等。如图
-
+![graph](/img/network-driver-articul006.jpg)
 
 execdriver作为Docker容器的执行驱动，负责创建容器运行命名空间，负责容器资源使用的统计与限制，负责容器内部进程的真正运行等。在execdriver的实现过程中，原先可以使用LXC驱动调用LXC的接口，来操纵容器的配置以及生命周期，而现在execdriver默认使用native驱动，不依赖于LXC。具体体现在Daemon启动过程中加载的ExecDriverflag参数，该参数在配置文件已经被设为"native"。这可以认为是Docker在1.2版本上一个很大的改变，或者说Docker实现跨平台的一个先兆。如图
+![execdriver](/img/exec-driver-articul007.jpg)
 
 
 #### libcontainer
@@ -120,6 +126,7 @@ execdriver作为Docker容器的执行驱动，负责创建容器运行命名空�
 libcontainer是Docker架构中一个使用Go语言设计实现的库，设计初衷是希望该库可以不依靠任何依赖，直接访问内核中与容器相关的API。
 
 正是由于libcontainer的存在，Docker可以直接调用libcontainer，而最终操纵容器的namespace、cgroups、apparmor、网络设备以及防火墙规则等。这一系列操作的完成都不需要依赖LXC或者其他包。libcontainer架构如图4.7
+![execdriver](/img/libcontainer-articul008.jpg)
 
 另外，libcontainer提供了一整套标准的接口来满足上层对容器管理的需求。或者说，libcontainer屏蔽了Docker上层对容器的直接管理。又由于libcontainer使用Go这种跨平台的语言开发实现，且本身又可以被上层多种不同的编程语言访问，因此很难说，未来的Docker就一定会紧紧地和Linux捆绑在一起。而于此同时，Microsoft在其著名云计算平台Azure中，也添加了对Docker的支持，可见Docker的开放程度与业界的火热度。
 
@@ -131,11 +138,14 @@ Docker container（Docker容器）是Docker架构中服务交付的最终体现�
 
 Docker按照用户的需求与指令，订制相应的Docker容器：
 
-用户通过指定容器镜像，使得Docker容器可以自定义rootfs等文件系统；
-用户通过指定计算资源的配额，使得Docker容器使用指定的计算资源；
-用户通过配置网络及其安全策略，使得Docker容器拥有独立且安全的网络环境；
-用户通过指定运行的命令，使得Docker容器执行指定的工作。
-Docker容器示意图如图4.8
+- 用户通过指定容器镜像，使得Docker容器可以自定义rootfs等文件系统；
+- 用户通过指定计算资源的配额，使得Docker容器使用指定的计算资源；
+- 用户通过配置网络及其安全策略，使得Docker容器拥有独立且安全的网络环境；
+- 用户通过指定运行的命令，使得Docker容器执行指定的工作。
+
+Docker容器示意图如图
+![execdriver](/img/docker-container009.jpg)
+
 
 ### Docker运行案例分析
 
@@ -143,7 +153,8 @@ docker pull  和  docker run.
 
 #### docker pull
 
-从Docker Registry中下载指定的容器镜像，并存储在本地的Graph中，以备后续创建Docker容器时的使用。docker pull命令执行流程如图5.1
+从Docker Registry中下载指定的容器镜像，并存储在本地的Graph中，以备后续创建Docker容器时的使用。docker pull命令执行流程如图
+![execdriver](/img/docker-pull010.jpg)
 
 
 图中标记的红色箭头表示docker pull命令在发起后，Docker所做的一系列运行。以下逐一分析这些步骤。
@@ -164,7 +175,8 @@ docker pull  和  docker run.
 
 #### docker run
 
-docker run命令的作用是在一个全新的Docker容器内部运行一条指令。Docker在执行这条命令的时候，所做工作可以分为两部分：第一，创建Docker容器所需的rootfs；第二，创建容器的网络等运行环境，并真正运行用户指令。因此，在整个执行流程中，Docker Client给Docker Server发送了两次HTTP请求，第二次请求的发起取决于第一次请求的返回状态。Docker run命令执行流程如图5.2。
+docker run命令的作用是在一个全新的Docker容器内部运行一条指令。Docker在执行这条命令的时候，所做工作可以分为两部分：第一，创建Docker容器所需的rootfs；第二，创建容器的网络等运行环境，并真正运行用户指令。因此，在整个执行流程中，Docker Client给Docker Server发送了两次HTTP请求，第二次请求的发起取决于第一次请求的返回状态。Docker run命令执行流程如图。
+![execdriver](/img/docker-run011.jpg)
 
 
 图中标记的红色箭头表示docker run命令在发起后，Docker所做的一系列运行。以下逐一分析这些步骤。
@@ -214,12 +226,9 @@ docker run命令的作用是在一个全新的Docker容器内部运行一条指�
     + docker client如何执行具体的请求命令，最终将亲请求发送至docker server
 
 整个docker源代码运行的流程图：docker-run-flow 如图：
-
+![execdriver](/img/docker-run-flow101.jpg)
 
 ### docker命令的flag参数解析
-
-
-
 
 众所周知，在Docker的具体实现中，Docker Server与Docker Client均由可执行文件docker来完成创建并启动。那么，了解docker可执行文件通过何种方式区分两者，就显得尤为重要。
 
@@ -623,7 +632,7 @@ Docker Client在执行以上请求命令的时候，会执行CmdPull函数，传
 Docker Daemon是Docker架构中运行在后台的守护进程，大致可以分为Docker Server、Engine和Job三部分。Docker Daemon可以认为是通过Docker Server模块接受Docker Client的请求，并在Engine中处理请求，然后根据请求类型，创建出指定的Job并运行，运行过程的作用有以下几种可能：向Docker Registry获取镜像，通过graphdriver执行容器镜像的本地化操作，通过networkdriver执行容器网络环境的配置，通过execdriver执行容器内部运行的执行工作等.
 
 Docker Daemon框架示意图如图：
-
+![execdriver](/img/docker-daemon-articul301.jpg)
 
 ### Docker Daemon 源码分析内容安排
 
@@ -636,7 +645,7 @@ Docker Daemon框架示意图如图：
 启动Docker Daemon时，一般可以使用以下命令：docker --daemon=true; docker –d; docker –d=true等。接着由docker的main()函数来解析以上命令的相应flag参数，并最终完成Docker Daemon的启动。
 
 首先，附上Docker Daemon的启动流程图：
-
+![execdriver](/img/docker-daemon-articultr002.jpg)
 
 ### mainDaemon函数具体实现
 
