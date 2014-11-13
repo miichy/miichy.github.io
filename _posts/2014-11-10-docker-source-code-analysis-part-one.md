@@ -240,7 +240,7 @@ docker run命令的作用是在一个全新的Docker容器内部运行一条指�
 
 交待以上背景之后，随即进入实现Docker Client创建的源码，位于./docker/docker/docker.go，该go文件包含了整个Docker的main函数，也就是整个Docker（不论Docker Daemon还是Docker Client）的运行入口。部分main函数代码如下：
 
-{{{ % highlight go %}}}
+{% highlight go %}
 func main() {
     if reexec.Init() {
       return
@@ -249,13 +249,13 @@ func main() {
     // FIXME: validate daemon flags here
     ……
 }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 在以上代码中，首先判断reexec.Init()方法的返回值，若为真，则直接退出运行，否则的话继续执行。查看位于./docker/reexec/reexec.go中reexec.Init()的定义，可以发现由于在docker运行之前没有任何的Initializer注册，故该代码段执行的返回值为假。
 
 紧接着，main函数通过调用flag.Parse()解析命令行中的flag参数。查看源码可以发现Docker在./docker/docker/flag.go中定义了多个flag参数，并通过init函数进行初始化。代码如下：
 
-{{{ % highlight go %}}}
+{% highlight go %}
 var (
   flVersion     = flag.Bool([]string{"v", "-version"}, false, "Print version information and quit")
   flDaemon      = flag.Bool([]string{"d", "-daemon"}, false, "Enable daemon mode")
@@ -278,7 +278,7 @@ func init() {
   flKey = flag.String([]string{"-tlskey"}, filepath.Join(dockerCertPath, defaultKeyFile), "Path to TLS key file")
   opts.HostListVar(&flHosts, []string{"H", "-host"}, "The socket(s) to bind to in daemon mode\nspecified using one or more tcp://host:port, unix:///path/to/socket, fd://* or fd://socketfd.")
 }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 这里涉及到了Golang的一个特性，即init函数的执行。在Golang中init函数的特性如下：
 
@@ -326,24 +326,24 @@ func init() {
 
 在flag.Parse()之后的代码如下：
 
-{{{ % highlight go %}}}
+{% highlight go %}
 if *flVersion {
     showVersion()
     return
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 当经过解析flag参数后，若flVersion参数为真时，调用showVersion()显示版本信息，并从main函数退出；否则继续执行。
 
-{{{ % highlight go %}}}
+{% highlight go %}
 if *flDebug {
     os.Setenv("DEBUG","1")
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 若flDebug参数为真时，通过os包中Setenv函数创建一个名为DEBUG的系统环境变量，并将其值设为"1"。继续执行
 
-{{{ % highlight go %}}}
+{% highlight go %}
 if len(flHosts) == 0 {
     defaultHost := os.Getenv("DOCKER_HOST")
     if defaultHost == "" || *flDaemon {
@@ -355,41 +355,41 @@ if len(flHosts) == 0 {
     }
     flHosts = append(flHosts, defaultHost)
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 变量flHosts，flHosts的作用是为Docker Client提供所需要链接的host对象，也为Docker Server提供所要监听的对象。
 
 分析过程中，判断flHosts变量是否长度为0，若是，通过os包获取DOCKER_HOST环境变量的值，将其复制给defaultHost。若defaultHost为空或者flDaemon为真时，说明目前还没有一个定义的host对象，则将其默认设置为unix socket，值为api.DEFAULTUNIXSOCKET，该常量位于./docker/api/common.go,值为"/var/run/docker.sock",故defaultHost为"unix:///var/run/docker.sock".验证该defaultHost的合法性后，将defaultHost的值追加至flHost的末尾。继续执行。
 
-{{{ % highlight go %}}}
+{% highlight go %}
   if *flDaemon {
     mainDaemon()
     return
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 若flDaemon为真时，执行mainDaemon函数，实现Docker Daemon的启动，若mainDaemon函数执行完毕，则退出main函数，一般mainDaemon函数不会主动终结。由于本章节介绍Docker Client的启动，故假设flDaemon参数为假，不执行以上代码块。继续往下执行。
 
-{{{ % highlight go %}}}
+{% highlight go %}
   if len(flHosts) > 1 {
     log.Fatal("Please specify only one -H")
   }
   protoAddrParts := strings.SplitN(flHosts[0], "://", 2)
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 若flHosts的长度大于1的话，则抛出错误日志。接着将flHosts这个string数组中的第一个元素，进行分割，通过”://”来分割，分割出的两个部分放入变量protoAddrParts数组中。protoAddrParts的作用为解析出与Docker Server建立通信的协议与地址，为Docker Client创建过程中不可或缺的配置信息之一。
 
-{{{ % highlight go %}}}
+{% highlight go %}
    var (
     cli       *client.DockerCli
     tlsConfig tls.Config
   )
 tlsConfig.InsecureSkipVerify = true
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 由于之前已经假设过flDaemon为假，则可以认定main函数的运行是为了Docker Client的创建与执行。在这里创建两个变量：一个为类型是client.DockerCli指针的对象cli，另一个为类型是tls.Config的对象tlsConfig。并将tlsConfig的InsecureSkipVerify属性设置为真。TlsConfig对象的创建是为了保障cli在传输数据的时候，遵循安全传输层协议(TLS)。安全传输层协议(TLS) 用于两个通信应用程序之间保密性与数据完整性。tlsConfig是Docker Client创建过程中可选的配置信息。
 
-{{{ % highlight go %}}}
+{% highlight go %}
    // If we should verify the server, we need to load a trusted ca
   if *flTlsVerify {
     *flTls = true
@@ -402,11 +402,11 @@ tlsConfig.InsecureSkipVerify = true
     tlsConfig.RootCAs = certPool
     tlsConfig.InsecureSkipVerify = false
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 若flTlsVerify这个flag参数为真的话，则说明需要验证server端的安全性，tlsConfig对象需要加载一个受信的ca文件。该ca文件的路径为*flCA参数的值，最终完成tlsConfig对象中RootCAs属性的赋值，并将InsecureSkipVerify属性置为假。
 
-{{{ % highlight go %}}}
+{% highlight go %}
   // If tls is enabled, try to load and send client certificates
   if *flTls || *flTlsVerify {
     _, errCert := os.Stat(*flCert)
@@ -420,7 +420,7 @@ tlsConfig.InsecureSkipVerify = true
       tlsConfig.Certificates = []tls.Certificate{cert}
     }
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 如果flTls和flTlsVerify两个flag参数中有一个为真，则说明需要加载以及发送client端的证书。最终将证书内容交给tlsConfig的Certificates属性。
 
@@ -430,19 +430,19 @@ tlsConfig.InsecureSkipVerify = true
 
 Docker Client创建其实就是在已有配置参数信息的情况下，通过Client包中的NewDockerCli方法创建一个实例cli，源码如下：
 
-{{{ % highlight go %}}}
+{% highlight go %}
  if *flTls || *flTlsVerify {
     cli = client.NewDockerCli(os.Stdin, os.Stdout, os.Stderr, protoAddrParts[0], protoAddrParts[1], &tlsConfig)
   } else {
     cli = client.NewDockerCli(os.Stdin, os.Stdout, os.Stderr, protoAddrParts[0], protoAddrParts[1], nil)
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 如果flag参数flTls为真或者flTlsVerify为真的话，则说明需要使用TLS协议来保证传输的安全性，故创建DockerClient的时候，将TlsConfig参数传入；否则，同样创建Docker Client，只不过TlsConfig为nil。
 
 关于Client包中的NewDockerCli函数的实现，可以具体参见./docker/api/client/cli.go.
 
-{{{ % highlight go %}}}
+{% highlight go %}
 func NewDockerCli(in io.ReadCloser, out, err io.Writer, proto, addr string, tlsConfig *tls.Config) *DockerCli {
   var (
     isTerminal = false
@@ -476,7 +476,7 @@ func NewDockerCli(in io.ReadCloser, out, err io.Writer, proto, addr string, tlsC
     scheme:     scheme,
   }
 }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 总体而言，创建DockerCli对象较为简单，较为重要的DockerCli的属性有proto：传输协议；addr：host的目标地址，tlsConfig：安全传输层协议的配置。若tlsConfig为不为空，则说明需要使用安全传输层协议，DockerCli对象的scheme设置为“https”，另外还有关于输入，输出以及错误显示的配置，最终返回该对象。
 
@@ -490,7 +490,7 @@ main函数执行到目前为止，有一下内容需要为Docker命令的执行�
 
 Docker Client解析请求命令的工作，在Docker命令执行部分第一个完成，直接进入main函数之后的源码./docker/docker/docker.go ：
 
-{{{ % highlight go %}}}
+{% highlight go %}
 if err := cli.Cmd(flag.Args()...); err != nil {
     if sterr, ok := err.(*utils.StatusError); ok {
       if sterr.Status != "" {
@@ -500,11 +500,11 @@ if err := cli.Cmd(flag.Args()...); err != nil {
     }
     log.Fatal(err)
   }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 首先解析存放于flag.Args()中的具体请求参数，执行的函数为cli对象的Cmd函数。进入./docker/api/client/cli.go的Cmd函数：
 
-{{{ % highlight go %}}}
+{% highlight go %}
 // Cmd executes the specified command
 func (cli *DockerCli) Cmd(args ...string) error {
   if len(args) > 0 {
@@ -517,7 +517,7 @@ func (cli *DockerCli) Cmd(args ...string) error {
   }
   return cli.CmdHelp(args...)
 }
-{{{ % endhighlight  %}}}
+{% endhighlight  %}
 
 Cmd函数执行具体的指令。源码实现中，首先判断请求参数列表的长度是否大于0，若不是的话，说明没有请求信息，返回docker命令的Help信息；若长度大于0的话，说明有请求信息，则首先通过请求参数列表中的第一个元素args[0]来获取具体的method的方法。如果上述method方法不存在，则返回docker命令的Help信息，若存在的话，调用具体的method方法，参数为args[1]及其之后所有的请求参数。
 
