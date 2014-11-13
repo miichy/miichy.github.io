@@ -19,7 +19,7 @@ categories: docker源码
 
 用户是使用Docker Client 与Docker Daemon通信。DockerDaemon为Docker架构的主题，提供Server功能，可以接受DockerClient请求；Engine执行Docker内部的一系列工作，每一个项工作以一个Job形式存在。(如图)
 
-![docker架构](./img/docker-articultrue001.jpg)
+![docker架构](/img/docker-articultrue001.jpg)
 
 job运行过程中，
 
