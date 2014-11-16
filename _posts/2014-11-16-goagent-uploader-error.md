@@ -15,16 +15,16 @@ goagent的github上面，有简单的图文教程以及常见问题、配置介�
 
 由于中间好长一段时间没有更新过goagent，因此在看完 interstellar 后，想看一下星际制作背后的事情，墙内竟然都木有。哎，还有F同学介绍都很多好看都美剧赢剧也得自备楼梯。因此，打算将goagent 升级。
 
-－ 下载3.2.2 正式版（github上都有）。
-－ uploader.bat 上传配置
-	－ 出现问题：｀“uploader.py” line 103，in <module>｀
-－ 解法
-	－ 打开goagent.exe，再上传
-	－ 打开VPN 再上传
-	－ 删除.appcfg.cookie文件再上传
-	－ 将ie得代理设置为127.0.0.1再上传
-	－ google账户关闭二次验证，再上传
-	－ 将google账号得“不信任应用权限”开启
+- 下载3.2.2 正式版（github上都有）。
+- uploader.bat 上传配置
+	- 出现问题：｀“uploader.py” line 103，in <module>｀
+- 解法
+	- 打开goagent.exe，再上传
+	- 打开VPN 再上传
+	- 删除.appcfg.cookie文件再上传
+	- 将ie得代理设置为127.0.0.1再上传
+	- google账户关闭二次验证，再上传
+	- 将google账号得“不信任应用权限”开启
 
 在反复使用来前四种方法后，还是出现同样得问题。最终再第六种解法中搞定问题，得意顺利安装。
 
