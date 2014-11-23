@@ -45,13 +45,13 @@ class ExampleCommand(sublime_plugin.TextCommand):
 
 #### step three：Key Bindings
 
-高大上的快捷键绑定。一般的会有三个平台的快捷键，windows、linux、OSX，所以要创建三个文件，名字分别为：Default (Windows).sublime-keymap, Default (Linux).sublime-keymap 和 Default (OSX).sublime-keymap。windows和linux基本一样，OSX需要将windows中的ctrl键改成cmd键。
+高大上的快捷键绑定。一般的会有三个平台的快捷键，windows、linux、OSX，所以要创建三个文件，名字分别为：Default (Windows).sublime-keymap, Default (Linux).sublime-keymap 和 Default (OSX).sublime-keymap。windows和linux基本一样，OSX需要将windows中的ctrl键改成cmd键('super')。
 
 该文件是JSON格式的，给出下列实例（假设类名为HeadCommand）：
 
     [
         { 
-            "keys": ["ctrl+alt+x"], "command": "head"
+            "keys": ["super+alt+x"], "command": "head"
         }
     ]
 
