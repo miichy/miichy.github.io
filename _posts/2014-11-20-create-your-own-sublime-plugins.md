@@ -1,9 +1,8 @@
 --- 
 layout: post
 title:  create your own sublime plugins
-date: 2014-11-20 19-11-01 
+date: 2014-11-20 19:11:01 
 category: sublime plugins
-author:liumq 
 ---
 
 
@@ -75,7 +74,7 @@ class HeadCommand(sublime_plugin.TextCommand):
         """test doc"""
         a = time.localtime(time.time())
         b = time.strftime('%Y-%m-%d %H:%M:%S',a)
-        self.view.insert(edit, 0, "---\nlayout: post \ntitle:  \ndate: %s \ncategory: \nauthor:liumq \n---\n" % (b))
+        self.view.insert(edit, 0, "---\nlayout: post \ntitle:  \ndate: %s \ncategory:  \n---\n" % (b))
 
 class NewCommand(sublime_plugin.WindowCommand):
     def  run(self,commands):
