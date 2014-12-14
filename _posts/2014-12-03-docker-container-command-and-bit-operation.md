@@ -9,11 +9,18 @@ category:
 
 #### 实例
 
-获取正在运行的container的file system (Container ID)：/var/lib/docker/aufs/mnt/fcb5f68b80d507380ccd5061c90d599fa80b1788ab4062fc8c80e3469bf8e4b1/tomcat/webapps/nami-service/WEB-INF/classes/
+获取正在运行的container的file system (Container ID):
+
+	/var/lib/docker/aufs/mnt/fcb5f68b80d507380ccd5061c90d599fa80b1788ab4062fc8c80e3469bf8e4b1/tomcat/webapps/nami-service/WEB-INF/classes/
 
 实例：
-mysql container是file system： /var/lib/docker/aufs/mnt/f1d561252d4c5f83aa5d3fe20e3e1cf35ba98a2a451362f6dbc2c13e68ab6445
-mysql存储的数据在： /var/lib/docker/vfs/dir/5b2b2d05b66ad536af040cd024f70aa2dc4600a4baf72241fa0eb9417264823c
+mysql container是file system： 
+
+	/var/lib/docker/aufs/mnt/f1d561252d4c5f83aa5d3fe20e3e1cf35ba98a2a451362f6dbc2c13e68ab6445
+
+mysql存储的数据在： 
+
+	/var/lib/docker/vfs/dir/5b2b2d05b66ad536af040cd024f70aa2dc4600a4baf72241fa0eb9417264823c
 
 将上述的5b2b2d~  目录中的内容拷贝到 /tmp/sql中，使用mnt命令可以将5b2b2d~ 中的数据映射到运行的mysql中：
     
@@ -31,6 +38,8 @@ mysql存储的数据在： /var/lib/docker/vfs/dir/5b2b2d05b66ad536af040cd024f70
     docker run --name nami -e MYSQL_ROOT_PASSWORD=nami -p 3306:3306 -v /home/fun/nami_sql/:/var/lib/mysql -d nami_mysql:0.0.1
 
 #### rethinkdb & shipyard 命令实例
+
+{% highlight bash%}
 
 temari:~# docker run -it -P -d --name shipyard-rethinkdb shipyard/rethinkdb  ///运行rethinkdb
 7174232c498685af29d4ace7d6bf9d3de29878503cee2c00167436fed5bf4d62
@@ -50,6 +59,7 @@ CONTAINER ID        IMAGE                       COMMAND                CREATED  
 temari:~# docker logs shipyard
 FATA[0000] factory is not able to fill the pool: gorethink: dial tcp 0.0.0.0:49167: connection refused 
 
+{% endhighlight %}
 
 ## 位运算符
 
