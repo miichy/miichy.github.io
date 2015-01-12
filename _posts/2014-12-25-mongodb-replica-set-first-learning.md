@@ -187,7 +187,7 @@ RUN curl -SL "$TOMCAT_TGZ_URL" -o tomcat.tar.gz \
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
-{% endlight %}
+{% endhighlight %}
 
 4，docker attach CONTAINER
 

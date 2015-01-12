@@ -31,7 +31,7 @@ output: 3->4->1->2
         System.out.println(curr.val);
         return curr;
     }
-{% endhighligh %}
+{% endhighlight %}
 
 head  :  4->3->2->1
 
