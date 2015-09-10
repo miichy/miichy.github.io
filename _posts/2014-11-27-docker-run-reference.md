@@ -2,7 +2,7 @@
 layout: post 
 title:  Docker run reference
 date: 2014-11-27 14:48:27 
-category: 
+category: docker
 ---
 
 ## Docker run reference
