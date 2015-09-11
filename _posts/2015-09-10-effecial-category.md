@@ -2,7 +2,9 @@
 layout: post 
 title:  有效地进行资料整理
 date: 2015-09-10 20:56:53 
-category: 归类,heidi
+category: 归类
+tagline: "Supporting tagline"
+tags : [资料分类, heidi分类法]
 ---
 
 ##  有效归类
