@@ -6,7 +6,7 @@ category:  regular
 tags : [linux,shell,regular]
 ---
 
-(文章转载至这里)[http://www.cnblogs.com/deerchao/archive/2006/08/24/zhengzhe30fengzhongjiaocheng.html]
+[文章转载至这里](http://www.cnblogs.com/deerchao/archive/2006/08/24/zhengzhe30fengzhongjiaocheng.html)
 
 **\b** 是特殊代码，*元字符* metacharacter,代表单词的开头或结尾，即为单词的分界处，英文单词由空格、标点符号或者换行来分隔，但是**\b**不匹配单词的分割字符的任何一个，只匹配一个位置。
 
@@ -85,6 +85,7 @@ tags : [linux,shell,regular]
 ||注释||（？＃comment）||这种类型的分组不对正则表达式的处理产生任何影响，用于提供注释让人阅读||
 
 零宽断言：
+
 \b  ^  $  用于指定一个位置，被称为零宽断言。
 
 (？＝exp)，断言自身出现的位置的后面能匹配表达式exp。
@@ -160,7 +161,7 @@ tags : [linux,shell,regular]
 ||\v	||竖向制表符
 ||\f	||换页符
 ||\n	||换行符
-||\e	||||Escape
+||\e	||Escape
 ||\0nn	||ASCII代码中八进制代码为nn的字符
 ||\xnn	||ASCII代码中十六进制代码为nn的字符
 ||\unnnn	||Unicode代码中十六进制代码为nnnn的字符
@@ -174,7 +175,7 @@ tags : [linux,shell,regular]
 ||(?<x>-<y>exp)	||平衡组
 ||(?im-nsx:exp)	||在子表达式exp中改变处理选项
 ||(?im-nsx)	||为表达式后面的部分改变处理选项
-||(?(exp)yes|no)	||把exp当作零宽正向先行断言，如果在这个位置能匹配，使用yes作为此组的表达式；否则使用no
+||(?(exp)yes\|no)	||把exp当作零宽正向先行断言，如果在这个位置能匹配，使用yes作为此组的表达式；否则使用no
 ||(?(exp)yes)	||同上，只是使用空表达式作为no
 ||(?(name)yes|no)	||如果命名为name的组捕获到了内容，使用yes作为表达式；否则使用no
 ||(?(name)yes)	||同上，只是使用空表达式作为no
